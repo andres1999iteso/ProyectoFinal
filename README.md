@@ -1,6 +1,8 @@
 ## Description
 *Use between 2 and 4 technical studies as tools to generate trading opportunities, which is equivalent to using technical analysis for criteria 1 and especially 2.*
 
+The behavior of the USD_MXN is analyzed during the statement of the GDP indicator of the US economy.
+
 ## Install dependencies
 
 Install all the dependencies stated in the requirements.txt file, just run the following command in terminal:
