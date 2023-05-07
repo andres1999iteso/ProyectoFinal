@@ -1,6 +1,5 @@
 ## Description
-*Insert here a brief description of the project, including, purpose, technologies used and context 
-where it was created.*
+*Use between 2 and 4 technical studies as tools to generate trading opportunities, which is equivalent to using technical analysis for criteria 1 and especially 2.*
 
 ## Install dependencies
 
@@ -10,12 +9,11 @@ Install all the dependencies stated in the requirements.txt file, just run the f
         
 Or you can manually install one by one using the name and version in the file.
 
-## Funcionalities
-
-*Add here examples of core functionalities for the project in this repository.*
-
 ## Author
-*Add Name and a brief description on who you are.*
+*Andrés Ramírez Villanueva
+Carolina Barba Anaya
+Gabriela Ivonne Montoya Ortiz
+Andrés Gomez Luna Diaz del Castillo*
 
 ## License
 **GNU General Public License v3.0** 
