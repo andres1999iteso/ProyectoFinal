@@ -25,3 +25,5 @@ def descarga_data(tickers):
     mt5.shutdown()
     
     return final
+
+def calcular_capital_acumulado(datos_precios):
