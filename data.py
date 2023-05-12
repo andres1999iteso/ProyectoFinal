@@ -41,14 +41,33 @@ for i in range(len(USDMXN_train)):
 capital_acumulado_prueba = []
 capital_actual = capital_inicial 
 
+#calculo de capital acumulado periodo prueba
 for i in range(len(USDMXN_test)):
     precio_actual_USDMXN = USDMXN_test.iloc[i]['close']
     precio_anterior_USDMXN = USDMXN_train.iloc[i-1]['close']
     cambio_precio_USDMXN = precio_actual_USDMXN - precio_anterior_USDMXN
 
-#calculo de capital acumulado periodo prueba
-for i in range(len(USDMXN_test)):
-
+    precio_actual_EURUSD = EURUSD_test.iloc[i]['close']
+    precio_anterior_EURUSDN = EURUSD_test.iloc[i-1]['close']
+    cambio_precio_EURUSD = precio_actual_EURUSD - precio_anterior_EURUSDN
     
-    #calculo diferencias absolutas
-    dif_absolutas = abs(capital_acumulado_ent - capital_acumulado_ent)
+    # Calculo de capital actualizado
+    cambio_capital = cambio_precio_USDMXN + cambio_precio_EURUSD
+    capital_actual += cambio_capital
+
+    #ajuste si excede el limite de perdida max
+
+    if cambio_capital<0:
+        capital_actual = max(capital_actual, capital_actual - max_perdida_cap)
+        capital_acumulado_prueba.append(capital_actual)
+
+#calculo diferencias absolutas
+dif_absolutas = abs(capital_acumulado_ent - capital_acumulado_ent)
+
+# MAD 
+mad1 = dif_absolutas.mean()
+mad2 = dif_absolutas.median()
+mad3 = dif_absolutas.mad()
+tabla = pd.DataFrame({'MAD1':[mad1],'MAD2':[mad2],'MAD3':[mad3]})
+print(tabla)
+
