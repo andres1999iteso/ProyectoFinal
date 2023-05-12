@@ -27,3 +27,21 @@ def descarga_data(tickers):
     return final
 
 #def calcular_capital_acumulado(datos_precios):
+import pandas as pd
+
+def cal_rsi(data, window=14):
+    delta = data.diff(1)
+    delta.dropna(inplace=True)
+
+    positive = delta.copy()
+    negative = delta.copy()
+
+    positive[positive < 0] = 0
+    negative[negative > 0] = 0
+
+    average_gain = positive.rolling(window=window).mean()
+    average_loss = abs(negative.rolling(window=window).mean())
+
+    relative_strength = average_gain / average_loss
+    rsi = 100 - (100 / (1 + relative_strength))
+    return rsi

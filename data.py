@@ -14,8 +14,7 @@ import numpy as np
 
 #EURUSD_test = EURUSD[(EURUSD['time'] >= '2021-02-01') & (EURUSD['time'] <='2022-02-01')]
 
-#indicador = pd.read_csv('./files/Gross Domestic Product Annualized.csv')
-
+indicador = pd.read_csv('./files/Gross Domestic Product Annualized.csv')
 
 USDMXN = pd.read_csv('./files/USDMXN.csv')
 
@@ -94,3 +93,63 @@ mad2 = np.median(dif_absolutas)
 mad3 = np.mean(np.abs(dif_absolutas - np.mean(dif_absolutas)))
 tabla = pd.DataFrame({'MAD1': [mad1], 'MAD2': [mad2], 'MAD3': [mad3]})
 print(tabla)
+
+#Generación de señal de compra o de venta.
+import pandas as pd
+import numpy as np
+
+# Define las variables y carga los datos
+
+capital_inicial = 100000
+max_perdida_cap = 1000
+nivel_entrada = 30
+nivel_salida = 70
+
+rsi = cal_rsi(USDMXN_train['close'])  # Correr primero functions
+indicador = pd.read_csv('./files/Gross Domestic Product Annualized.csv')  
+
+min_length = min(len(USDMXN_train), len(EURUSD_train), len(USDMXN_test), len(EURUSD_test), len(indicador))
+rsi = rsi[:min_length]
+indicador = indicador[:min_length]
+
+posicion_abierta = False
+capital_actual = capital_inicial
+cantidad_posicion = 0
+precio_apertura = 0
+precio_cierre = 0
+capital_acumulado = []
+operaciones = []
+
+# Itera sobre los datos y realiza las operaciones
+
+for i in range(len(rsi)):
+    if rsi[i] > nivel_entrada and not posicion_abierta and indicador.iloc[i]['Gross Domestic Product Annualized'] > 0:
+        # Generar señal de compra
+        precio_apertura = precio_actual_USDMXN  
+        cantidad_posicion = (capital_actual * max_perdida_cap) // precio_apertura
+        capital_actual -= cantidad_posicion * precio_apertura
+        posicion_abierta = True
+        operaciones.append('Compra')
+
+    elif rsi[i] < nivel_salida and posicion_abierta and indicador.iloc[i]['Gross Domestic Product Annualized'] < 0:
+        # Generar señal de venta
+        precio_cierre = precio_actual_USDMXN  
+        capital_actual += cantidad_posicion * precio_cierre
+        posicion_abierta = False
+        operaciones.append('Venta')
+
+    if posicion_abierta and (precio_cierre - precio_actual_USDMXN) < -max_perdida_cap:
+        # Cierre de posición por pérdida máxima alcanzada
+        capital_actual += cantidad_posicion * precio_actual_USDMXN
+        posicion_abierta = False
+        operaciones.append('Venta')
+
+    capital_acumulado.append(capital_actual)
+
+rendimiento_acumulado = capital_actual - capital_inicial
+rendimiento_promedio = rendimiento_acumulado / len(rsi)
+
+# Imprime la tabla de resultados
+
+tabla_rsi = pd.DataFrame({'Capital Acumulado': capital_acumulado, 'Operación': operaciones})
+print(tabla_rsi)
