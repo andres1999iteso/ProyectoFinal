@@ -26,4 +26,4 @@ def descarga_data(tickers):
     
     return final
 
-def calcular_capital_acumulado(datos_precios):
+#def calcular_capital_acumulado(datos_precios):
