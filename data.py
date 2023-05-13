@@ -151,6 +151,9 @@ for i in range(len(rsi)):
         capital_acumulado.append(capital_actual)
     
 
+        
+#%% Cosa que no nos sale
+
 rendimiento_acumulado = capital_actual - capital_inicial
 rendimiento_promedio = rendimiento_acumulado / len(rsi)
 
