@@ -119,11 +119,9 @@ precio_apertura = 0
 precio_cierre = 0
 capital_acumulado = []
 operaciones = []
+tickets = []
 
 # Itera sobre los datos y realiza las operaciones
-
-
- 
 for i in range(len(rsi)):
     
     if rsi[i] > nivel_entrada and not posicion_abierta and indicador.iloc[i]['actual'] > 0:
@@ -133,6 +131,7 @@ for i in range(len(rsi)):
         capital_actual -= cantidad_posicion * precio_apertura
         posicion_abierta = True
         operaciones.append('Compra')
+        tickets.append(f'Compra Ticket {i+1}')
         capital_acumulado.append(capital_actual)
 
     elif rsi[i] < nivel_salida and posicion_abierta and indicador.iloc[i]['actual'] < 0:
@@ -141,6 +140,7 @@ for i in range(len(rsi)):
         capital_actual += cantidad_posicion * precio_cierre
         posicion_abierta = False
         operaciones.append('Venta')
+        tickets(f'Vende Ticket {i+1}')
         capital_acumulado.append(capital_actual)
 
     if posicion_abierta and (precio_cierre - precio_actual_USDMXN) < -max_perdida_cap:
@@ -148,16 +148,14 @@ for i in range(len(rsi)):
         capital_actual += cantidad_posicion * precio_actual_USDMXN
         posicion_abierta = False
         operaciones.append('Venta')
+        tickets(f'Vende Ticket {i+1} (maxima perdida)')
         capital_acumulado.append(capital_actual)
     
-
-        
-#%% Cosa que no nos sale
 
 rendimiento_acumulado = capital_actual - capital_inicial
 rendimiento_promedio = rendimiento_acumulado / len(rsi)
 
 # Imprime la tabla de resultados
 
-tabla_rsi = pd.DataFrame({'Operación': operaciones})
+tabla_rsi = pd.DataFrame({'Operación': operaciones, 'Ticket':tickets})
 print(tabla_rsi)
