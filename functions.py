@@ -44,4 +44,7 @@ def cal_rsi(data, window=14):
 
     relative_strength = average_gain / average_loss
     rsi = 100 - (100 / (1 + relative_strength))
+    rsi = rsi.dropna()
+    rsi = rsi.reset_index(drop=True)
+    
     return rsi

@@ -105,7 +105,7 @@ max_perdida_cap = 1000
 nivel_entrada = 30
 nivel_salida = 70
 
-rsi = cal_rsi(USDMXN_train['close'])  # Correr primero functions
+rsi = fn.cal_rsi(USDMXN_train['close'])  # Correr primero functions
 indicador = pd.read_csv('./files/Gross Domestic Product Annualized.csv')  
 
 min_length = min(len(USDMXN_train), len(EURUSD_train), len(USDMXN_test), len(EURUSD_test), len(indicador))
@@ -122,34 +122,39 @@ operaciones = []
 
 # Itera sobre los datos y realiza las operaciones
 
+
+ 
 for i in range(len(rsi)):
-    if rsi[i] > nivel_entrada and not posicion_abierta and indicador.iloc[i]['Gross Domestic Product Annualized'] > 0:
+    
+    if rsi[i] > nivel_entrada and not posicion_abierta and indicador.iloc[i]['actual'] > 0:
         # Generar señal de compra
         precio_apertura = precio_actual_USDMXN  
-        cantidad_posicion = (capital_actual * max_perdida_cap) // precio_apertura
+        cantidad_posicion = (capital_actual * max_perdida_cap) / precio_apertura
         capital_actual -= cantidad_posicion * precio_apertura
         posicion_abierta = True
         operaciones.append('Compra')
+        capital_acumulado.append(capital_actual)
 
-    elif rsi[i] < nivel_salida and posicion_abierta and indicador.iloc[i]['Gross Domestic Product Annualized'] < 0:
+    elif rsi[i] < nivel_salida and posicion_abierta and indicador.iloc[i]['actual'] < 0:
         # Generar señal de venta
         precio_cierre = precio_actual_USDMXN  
         capital_actual += cantidad_posicion * precio_cierre
         posicion_abierta = False
         operaciones.append('Venta')
+        capital_acumulado.append(capital_actual)
 
     if posicion_abierta and (precio_cierre - precio_actual_USDMXN) < -max_perdida_cap:
         # Cierre de posición por pérdida máxima alcanzada
         capital_actual += cantidad_posicion * precio_actual_USDMXN
         posicion_abierta = False
         operaciones.append('Venta')
-
-    capital_acumulado.append(capital_actual)
+        capital_acumulado.append(capital_actual)
+    
 
 rendimiento_acumulado = capital_actual - capital_inicial
 rendimiento_promedio = rendimiento_acumulado / len(rsi)
 
 # Imprime la tabla de resultados
 
-tabla_rsi = pd.DataFrame({'Capital Acumulado': capital_acumulado, 'Operación': operaciones})
+tabla_rsi = pd.DataFrame({'Operación': operaciones})
 print(tabla_rsi)
