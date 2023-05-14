@@ -2,6 +2,7 @@ import pytz
 from datetime import datetime 
 import pandas as pd
 import MetaTrader5 as mt5
+import numpy as np
 
 def descarga_data(tickers):
 
@@ -195,8 +196,7 @@ def algoritmo_genetico(tamaño_poblacion, num_generaciones, probabilidad_cruce, 
         # Reemplazo de la población anterior con la nueva generación
         poblacion = nueva_generacion
     
-    # Impresión de los mejores parámetros encontrados
-    
+
     
     # Gráfica de los resultados
     plt.figure(figsize=(10, 6))
